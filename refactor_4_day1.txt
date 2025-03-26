@@ -1,0 +1,79 @@
+public class PatientVitalsService
+{
+    public void RecordVitals(PatientDetails patientDetails, GeneralVitals generalVitals)
+    {
+        // Validate temperature
+        generalVitals.ValidateTemperature();
+
+        // Validate blood pressure
+        generalVitals.ValidateBloodPressure();
+
+        // Validate heart rate
+        generalVitals.ValidateHeartRate(patientDetails.Age);
+
+        // Validate blood type
+        generalVitals.ValidateBloodType();
+
+        // Check for postprandial blood pressure alert
+        generalVitals.CheckPostprandialAlert();
+    }
+}
+
+public class PatientDetails
+{
+    public int PatientId { get; set; }
+    public int Age { get; set; }
+}
+
+public class GeneralVitals
+{
+    public DateTime LastMealTime { get; set; }
+    public double Temperature { get; set; }
+    public int HeartRate { get; set; }
+    public BloodPressure BloodPressure { get; set; }
+    public string BloodType { get; set; }
+
+    public void ValidateTemperature()
+    {
+        if (Temperature < 34 || Temperature > 42)
+            throw new ArgumentException("Invalid temperature");
+    }
+
+    public void ValidateHeartRate(int age)
+    {
+        int maxHeartRate = 220 - age;
+        if (HeartRate < 40 || HeartRate > maxHeartRate * 1.2)
+            throw new ArgumentException($"Heart rate invalid for age {age}");
+    }
+
+    public void CheckPostprandialAlert()
+    {
+        if ((DateTime.Now - LastMealTime).TotalHours < 2 && BloodPressure.Diastolic > 90)
+        {
+            // Trigger an alert (this could be a logging mechanism or a notification system)
+            Console.WriteLine("Elevated postprandial blood pressure");
+        }
+    }
+
+    public void ValidateBloodPressure()
+    {
+        if (BloodPressure.Systolic < 70 || BloodPressure.Systolic > 200)
+            throw new ArgumentException("Invalid systolic BP");
+        if (BloodPressure.Diastolic < 40 || BloodPressure.Diastolic > 120)
+            throw new ArgumentException("Invalid diastolic BP");
+        if (BloodPressure.Diastolic > BloodPressure.Systolic)
+            throw new ArgumentException("Diastolic cannot exceed systolic");
+    }
+
+    public void ValidateBloodType()
+    {
+        if (!new[] { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-" }.Contains(BloodType))
+            throw new ArgumentException("Invalid blood type");
+    }
+}
+
+public class BloodPressure
+{
+    public int Systolic { get; set; }
+    public int Diastolic { get; set; }
+}
