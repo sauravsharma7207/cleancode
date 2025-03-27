@@ -1,0 +1,33 @@
+// Interface for file reading
+public interface FileReader {
+    String readPage();
+    boolean isEndOfFile(String page);
+}
+
+// Interface for printing
+public interface Printer {
+    void print(String page);
+}
+
+// PrinterDriver class with Dependency Injection
+public class PrinterDriver {
+    private final FileReader fileReader;
+    private final Printer printer;
+
+    // Constructor Injection (Dependency Injection)
+    public PrinterDriver(FileReader fileReader, Printer printer) {
+        if (fileReader == null || printer == null) {
+            throw new IllegalArgumentException("Dependencies cannot be null");
+        }
+        this.fileReader = fileReader;
+        this.printer = printer;
+    }
+
+    public void print() {
+        String page = fileReader.readPage();
+        while (!fileReader.isEndOfFile(page)) {
+            printer.print(page);
+            page = fileReader.readPage();
+        }
+    }
+}
