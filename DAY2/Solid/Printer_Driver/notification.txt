@@ -1,6 +1,4 @@
-Refactored code from GPT from our code.
- 
-// Step 1: Define Interfaces
+
 interface INotificationChannel {
     void sendToUser(String content);
 }
@@ -8,8 +6,7 @@ interface INotificationChannel {
 interface INotificationContent {
     String createContent(String message);
 }
- 
-// Step 2: Implement Notification Channels
+
 class EmailChannel implements INotificationChannel {
     @Override
     public void sendToUser(String content) {
@@ -18,20 +15,18 @@ class EmailChannel implements INotificationChannel {
 }
  
 class SMSChannel implements INotificationChannel {
-    @Override
     public void sendToUser(String content) {
         System.out.println("Sending SMS: " + content);
     }
 }
  
 class PushNotificationChannel implements INotificationChannel {
-    @Override
     public void sendToUser(String content) {
         System.out.println("Sending Push Notification: " + content);
     }
 }
  
-// Step 3: Implement Notification Content Creation
+// Implement Notification Content Creation
 class NotificationContentFactory {
     public static String createContent(String message, String channelType) {
         switch (channelType) {
@@ -47,7 +42,7 @@ class NotificationContentFactory {
     }
 }
  
-// Step 4: Create Notification Service
+// Create Notification Service
 class NotificationService {
     private final INotificationChannel channel;
  
@@ -61,7 +56,7 @@ class NotificationService {
     }
 }
  
-// Step 5: Use a Registry for Channels
+// Use a Registry for Channels
 class ChannelRegistry {
     private final Map<String, INotificationChannel> channels = new HashMap<>();
  
@@ -74,7 +69,7 @@ class ChannelRegistry {
     }
 }
  
-// Step 6: Example Usage
+//  Example Usage
 public class Main {
     public static void main(String[] args) {
         // Register available channels
